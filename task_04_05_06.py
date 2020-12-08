@@ -1,18 +1,9 @@
-# 4. Начните работу над проектом «Склад оргтехники». Создайте класс, описывающий склад.
-# А также класс «Оргтехника», который будет базовым для классов-наследников. Эти классы — конкретные типы оргтехники (принтер, сканер, ксерокс).
-# В базовом классе определить параметры, общие для приведенных типов. В классах-наследниках реализовать параметры, уникальные для каждого типа оргтехники.
-# 5. Продолжить работу над первым заданием. Разработать методы, отвечающие за приём оргтехники на склад и передачу в определенное подразделение компании.
-# Для хранения данных о наименовании и количестве единиц оргтехники, а также других данных, можно использовать любую подходящую структуру, например словарь.
-# 6. Продолжить работу над вторым заданием. Реализуйте механизм валидации вводимых пользователем данных.
-#  Например, для указания количества принтеров, отправленных на склад, нельзя использовать строковый тип данных.
-# Подсказка: постарайтесь по возможности реализовать в проекте «Склад оргтехники» максимум возможностей, изученных на уроках по ООП.
-
 class EquipmentStorage:
     max_count_storage:int = 3 # максимальное количество оргтехники на складе
     equipment_list:list = []
 
     def storage(self, unit, for_department):
-        tmp_dict = {'type': unit.type, 'model': unit.model, 'price': unit.price, 'for_department': for_department}
+        tmp_dict = {'type': unit.eq_type, 'model': unit.model, 'price': unit.price, 'for_department': for_department}
 
         self.equipment_list.append(tmp_dict)
 
@@ -24,8 +15,8 @@ class EquipmentStorage:
     def transfer_equipment(self):
         for idx, row in enumerate(self.equipment_list):
             print(f'{row["type"]} {row["model"]} передан в/на {row["for_department"]}')
-            self.equipment_list.pop(idx)
 
+        self.equipment_list.clear()
         print(f'Количество техники на складе после передачи в подразделения: {len(self.equipment_list)}')
 
 class Equipment:
@@ -35,7 +26,7 @@ class Equipment:
 
 
 class Printer(Equipment):
-    type: str = 'принтер'
+    eq_type: str = 'принтер'
     cartridge_level: int = 100 # условно уровень картриджа в процентах
     text_to_print:str = ''
 
@@ -55,7 +46,7 @@ class Printer(Equipment):
 
 
 class Scanner(Equipment):
-    type: str = 'сканер'
+    eq_type: str = 'сканер'
     file_name:str = '' # имя файла
     ext_format:str = '' # расширение файла
 
@@ -74,7 +65,7 @@ class Scanner(Equipment):
 
 
 class Xerox(Equipment):
-    type:str = 'ксерокс'
+    eq_type:str = 'ксерокс'
     cartridge_level = 100 # условно уровень картриджа в процентах
     text_to_copy: str = ''
 
@@ -99,7 +90,7 @@ while True:
         print('Недостаточно места на складе!')
         break
 
-    type = input('Это принтер(printer)/сканер(scanner)/ксерокс(xerox)? ')
+    eq_type = input('Это принтер(printer)/сканер(scanner)/ксерокс(xerox)? ')
     model = input('Введите модель >> ')
     price = input('Введите цену >> ')
 
@@ -108,18 +99,18 @@ while True:
         continue
 
     department = input('Для какого подразделения техника? ')
-    quit = input('Закончить ввод? y/n ')
+    quit = input('Продолжить ввод? y/n ')
 
-    if type == 'принтер' or 'printer':
+    if eq_type == 'принтер' or eq_type =='printer':
         printer1 = Printer(model, float(price), 'Test_to_print', 1)
         storage.storage(printer1, department)
-    elif type == 'сканер' or 'scanner':
+    elif eq_type == 'сканер' or eq_type =='scanner':
         scanner1 = Scanner(model, float(price), 'scan01', '.jpg', 1)
         storage.storage(scanner1, department)
-    elif type == 'ксерокс' or 'xerox':
+    elif eq_type == 'ксерокс' or eq_type =='xerox':
         xerox1 = Xerox(model, float(price), 'test_to_copy', 5)
         storage.storage(xerox1, department)
-    if quit == 'y':
+    if quit == 'n':
         break
 
 #printer1 = Printer('HP LaserJet Pro M15w', 9000, 'Test_to_print', 1)
